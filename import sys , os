@@ -1,0 +1,55 @@
+import sys , os 
+from PyQt5.QtWidgets import QApplication ,QWidget , QLabel ,QVBoxLayout
+from PyQt5.QtCore import Qt 
+from PyQt5.QtGui import QPixmap 
+ 
+
+class ImageLabel(QLabel):
+    def __init__(self):
+        super().__init__()
+
+
+
+        self.alignment(Qt.AlignCenter)
+        self.setText('Start Brainstorming ! , Drop Here!')
+        self.styleSheet('''
+                        Qlabel{
+                        border: 4px dashed #aaa
+                         background-image: linear-gradient(to bottom, #64EEFA , #124CA2);
+
+                        
+                        
+                        
+                        }
+                
+                        ''')
+class AppDemo(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(400,400)
+        self.acceptDrops(True)
+        self.images = []  
+        self.image_positions = []
+
+
+        mainLayout(mainLayout)
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasUrls():
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasUrls():
+            for url in event.mimeData().urls():
+                file_path = url.toLocalFile()
+                pixmap = QPixmap(file_path)
+                if not pixmap.isNull():
+                    # Add the new image and its position
+                    self.images.append(pixmap)
+                    self.image_positions.append((len(self.images) * 10, len(self.images) * 10))  # Offset position
+            self.update()  # Trigger a repaint
+
+app = QApplication (sys.argv)
+
+sys.exit(app.exec_())
